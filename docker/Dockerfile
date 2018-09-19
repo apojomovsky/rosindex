@@ -30,7 +30,9 @@ RUN apt-get update && \
         ruby-dev \
         rubygems-integration \
         ssh \
-        sudo && \
+        sudo \
+        tmux \
+        vim && \
     rm -rf /var/lib/apt/lists/*
 
 RUN ln -s `which nodejs` /usr/local/bin/node

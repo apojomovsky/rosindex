@@ -1,0 +1,24 @@
+# Site settings
+title: ROS Index
+#email: your-email@domain.com
+description: > # this means to ignore newlines until "baseurl:"
+  a community-maintained index of robotics software
+baseurl: "/index.ros.org" # the subpath of your site, e.g. /blog/
+url: "https://ros-infrastructure.github.io/index.ros.org/" # the base hostname & protocol for your site
+#twitter_username: jekyllrb
+github_username:  rosindex
+#destination: ../deploy
+
+
+# This tracks the location of the remote repositories.
+# The original location is excluded from jekyll build meaning that it cannot modify it.
+repositories:
+  rosdistro:
+    origin: "_remotes/rosdistro"
+    destination: "rosdistro"
+  rosdep:
+    origin: "_remotes/rosdistro"
+    destination: "rosdep"
+  rosforks:
+    origin: "_remotes/rosdistro"
+    destination: "rosforks"

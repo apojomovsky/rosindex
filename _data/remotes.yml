@@ -1,3 +1,21 @@
+# VCS repos file listing rosindex generation resources.
+repositories:
+  rosdistro:
+    type: git
+    url: git@github.com:apojomovsky/rosdistro.git
+    version: ros2
+  rosdep:
+    type: git
+    url: git@github.com:apojomovsky/rosdistro.git
+    version: master
+  rosforks:
+    type: git
+    url: git@github.com:rosindex/rosforks.git
+    version: master
+  deploy:
+    type: git
+    url: git@github.com:ros-infrastructure/index.ros.org.git
+    version: gh-pages
 # VCS repos file listing all non-package specific
 # documentation repositories. Its file format, however,
 # has been extended to include, on a per repository basis,
@@ -9,7 +27,6 @@
 #                        Instructions.
 #
 # These extra fields will be ignored by VCS upon repo importation.
-repositories:
   ros2_overview:
     type: git
     url: git@github.com:ros2/ros2_documentation.git

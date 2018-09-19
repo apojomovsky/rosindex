@@ -786,12 +786,12 @@ class Indexer < Jekyll::Generator
 
     raw_rosdeps = load_rosdeps(
       rosdep_path,
-      site.config['platforms'],
-      site.config['package_manager_names'].keys)
+      site.data['data']['platforms'],
+      site.data['data']['package_manager_names'].keys)
 
     raw_rosdeps.each do |dep_name, dep_data|
-      platforms = site.config['platforms']
-      manager_set = Set.new(site.config['package_manager_names'])
+      platforms = site.data['data']['platforms']
+      manager_set = Set.new(site.data['data']['package_manager_names'])
 
       full_dep_data = {}
       platforms.each do |platform_key, platform_details|
