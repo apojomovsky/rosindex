@@ -17,9 +17,9 @@ html: build deploy
 
 # Clone a bunch of other repos part of the rosdistro and build the index.
 build:
-	#mkdir -p $(deploy_dir)
-	#mkdir -p $(remotes_dir)
-	#vcs import --input $(remotes_file) --force $(remotes_dir)
+	mkdir -p $(deploy_dir)
+	mkdir -p $(remotes_dir)
+	vcs import --input $(remotes_file) --force $(remotes_dir)
 	bundle exec jekyll build --verbose --trace --config=$(config_file),$(index_file)
 
 # deploy assumes build has run already

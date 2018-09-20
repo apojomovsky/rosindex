@@ -45,7 +45,7 @@
                   </button>
                   <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                     {% for repo_name in site.documentation_repos %}
-                      {% for repo site.data.remotes.repositories[repo_name] %}
+                      {% for repo in site.data.remotes.repositories[repo_name] %}
                         <li>
                           <a href="{{site.baseurl}}/doc/{{ repo[0] }}">
                             {{ repo[1].short_description }}

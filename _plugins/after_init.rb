@@ -3,9 +3,18 @@ require 'fileutils'
 
 Jekyll::Hooks.register :site, :after_init do |site|
     site.config['documentation_repos'].each do |repo_dir|
-        STDOUT.puts "Path to repo to copy: #{File.join(site.source, "_remotes", repo_dir)}".green
-        STDOUT.puts "Destination path: #{File.join(site.source)}".green
-        FileUtils.rm_rf(File.join(site.source, repo_dir))
-        FileUtils.cp_r(File.join(site.source, "_remotes", repo_dir), File.join(site.source))
+        #FileUtils.rm_rf(File.join(site.source, repo_dir))
+        origin = File.join(site.source, "_remotes", repo_dir)
+        dest = File.join(site.source) 
+        to_delete = File.join(site.source, repo_dir) 
+        STDOUT.puts "origin: #{origin}".green
+        STDOUT.puts "dest: #{dest}".green
+        STDOUT.puts "to_delete: #{to_delete}".green
+        if File.directory?(to_delete)
+        FileUtils.rm_r(to_delete)
+        end
+        if File.directory?(origin)
+            FileUtils.cp_r(origin, dest)
+        end
     end
 end
