@@ -62,6 +62,7 @@ domain_blacklist:
 exclude:
   - _scripts
   - _devel
+  - _plugin_data
   - _ruby_libs
   - _remotes
   - node_modules
