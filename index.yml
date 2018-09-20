@@ -9,24 +9,12 @@ url: "https://ros-infrastructure.github.io/index.ros.org/" # the base hostname &
 github_username:  rosindex
 #destination: ../deploy
 
-
-# This tracks the location of the remote repositories.
-# The original location is excluded from jekyll build meaning that it cannot modify it.
-repositories:
-  rosdistro:
-    origin: "_remotes/rosdistro"
-    destination: "rosdistro"
-  rosdep:
-    origin: "_remotes/rosdep"
-    destination: "rosdep"
-  rosforks:
-    origin: "_remotes/rosforks"
-    destination: "rosforks"
-
-
 # Sources
 rosdep_path: rosdep
 rosdistro_path: rosdistro
 repos_path: rosforks/repos
 attic_file: rosforks/attic.yaml
 
+# Indicates which of the repositories tracked in remotes.yml corresopnd to documentation repos.
+documentation_repos:
+  - ros2_overview

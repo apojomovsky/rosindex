@@ -2,9 +2,6 @@ devel_config_file=_config_devel.yml
 
 workdir=..
 deploy_dir=$(workdir)/deploy
-checkout_dir=$(workdir)/checkout
-
-
 data_dir=_data
 docs_dir=doc
 
@@ -22,7 +19,6 @@ html: build deploy
 build:
 	mkdir -p $(deploy_dir)
 	mkdir -p $(remotes_dir)
-	mkdir -p $(checkout_dir)
 	vcs import --input $(remotes_file) --force $(remotes_dir)
 	bundle exec jekyll build --verbose --trace --config=$(config_file),$(index_file)
 

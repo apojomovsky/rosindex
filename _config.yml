@@ -37,11 +37,11 @@ debbuild_release_path: cache/debbuild_releases
 wiki_title_index_filename: cache/ros_org_wiki_title_index.txt
 
 # If true, this skips finding repos based on the repo sources
-skip_discover: false
+skip_discover: true
 # If true, this skips updating the known repos
-skip_update: false
+skip_update: true
 # If true, this skips scraping the cloned repos
-skip_scrape: false
+skip_scrape: true
 # If true, this skips generating the search index
 skip_search_index: true
 
