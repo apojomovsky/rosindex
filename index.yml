@@ -17,8 +17,16 @@ repositories:
     origin: "_remotes/rosdistro"
     destination: "rosdistro"
   rosdep:
-    origin: "_remotes/rosdistro"
+    origin: "_remotes/rosdep"
     destination: "rosdep"
   rosforks:
-    origin: "_remotes/rosdistro"
+    origin: "_remotes/rosforks"
     destination: "rosforks"
+
+
+# Sources
+rosdep_path: rosdep
+rosdistro_path: rosdistro
+repos_path: rosforks/repos
+attic_file: rosforks/attic.yaml
+
