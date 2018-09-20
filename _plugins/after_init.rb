@@ -7,9 +7,6 @@ Jekyll::Hooks.register :site, :after_init do |site|
         origin = File.join(site.source, "_remotes", repo_dir)
         dest = File.join(site.source) 
         to_delete = File.join(site.source, repo_dir) 
-        STDOUT.puts "origin: #{origin}".green
-        STDOUT.puts "dest: #{dest}".green
-        STDOUT.puts "to_delete: #{to_delete}".green
         if File.directory?(to_delete)
         FileUtils.rm_r(to_delete)
         end

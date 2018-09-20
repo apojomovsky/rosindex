@@ -63,8 +63,8 @@ exclude:
   - _scripts
   - _devel
   - _plugin_data
-  - _ruby_libs
   - _remotes
+  - _ruby_libs
   - node_modules
   - Gemfile
   - Gemfile.lock
