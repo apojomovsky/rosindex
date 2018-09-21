@@ -11,7 +11,6 @@ remotes_file=$(data_dir)/remotes.yml
 config_file=_config.yml
 index_file=index.yml
 
-
 # This target is invoked by a doc_independent job on the ROS buildfarm.
 html: build deploy
 
