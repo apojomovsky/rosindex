@@ -3,7 +3,6 @@ require 'fileutils'
 
 Jekyll::Hooks.register :site, :after_init do |site|
     site.config['documentation_repos'].each do |repo_dir|
-        #FileUtils.rm_rf(File.join(site.source, repo_dir))
         origin = File.join(site.source, "_remotes", repo_dir)
         dest = File.join(site.source) 
         to_delete = File.join(site.source, repo_dir) 

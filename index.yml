@@ -10,11 +10,11 @@ github_username:  rosindex
 #destination: ../deploy
 
 # Sources
-rosdep_path: rosdep
-rosdistro_path: rosdistro
-repos_path: rosforks/repos
-attic_file: rosforks/attic.yaml
+rosdep_path: _remotes/rosdep
+rosdistro_path: _remotes/rosdistro
+repos_path: _remotes/rosforks/repos
+attic_file: _remotes/rosforks/attic.yaml
 
-# Indicates which of the repositories tracked in remotes.yml corresopnd to documentation repos.
+# Indicates which of the repositories tracked in remotes.yml correspond to documentation repos.
 documentation_repos:
   - ros2_overview
