@@ -7,7 +7,7 @@ repositories:
   rosdep:
     type: git
     url: git@github.com:apojomovsky/rosdistro.git
-    version: master
+    version: ros2
   rosforks:
     type: git
     url: git@github.com:rosindex/rosforks.git
