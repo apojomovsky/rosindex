@@ -133,67 +133,67 @@ class Indexer < Jekyll::Generator
   end
 
   def update_local(site, repo_instances)
-
-    # add / fetch all the instances
-    repo_instances.instances.each do |id, repo|
-
-      begin
-        unless (site.config['repo_name_whitelist'].length == 0 or site.config['repo_name_whitelist'].include?(repo.name)) then next end
-        unless site.config['repo_id_whitelist'].size == 0 or site.config['repo_id_whitelist'].include?(repo.id)
-          next
-        end
-
-        puts "Updating repo / instance "+repo.name+" / "+repo.id+" from uri: "+repo.uri
-
-        # open or initialize this repo
-        local_path = File.join(@checkout_path, repo_instances.name, id)
-
-        # make sure there's an actual uri
-        unless repo.uri
-          raise IndexException.new("No URI for repo instance " + id, id)
-        end
-
-        if @domain_blacklist.include? URI(repo.uri).hostname
-          msg = "Repo instance " + id + " has a blacklisted hostname: " + repo.uri.to_s
-          puts ('WARNING:' + msg).yellow
-          repo.errors << msg
-          next
-        end
-
-        (1..3).each do |attempt|
-          begin
-            # open or create a repo
-            vcs = get_vcs(repo)
-            unless (not vcs.nil? and vcs.valid?) then next end
-
-            # fetch the repo
-            begin
-              vcs.fetch()
-            rescue VCSException => e
-              msg = "Could not update repo, using old version: "+e.msg
-              puts ("WARNING: "+msg).yellow
-              repo.errors << msg
-              vcs.close()
-            end
-            # too many open files if we don't do this
-            vcs.close()
-
-            break
-          rescue VCSException => e
-            puts ("Failed to communicate with source repo after #{attempt} attempt(s)").yellow
-            if attempt == 3
-              raise IndexException.new("Could not fetch source repo: "+e.msg, id)
-            end
-          end
-        end
-
-      rescue IndexException => e
-        @errors[repo_instances.name] << e
-        repo.accessible = false
-        repo.errors << e.msg
-      end
-
-    end
+#
+#    # add / fetch all the instances
+#    repo_instances.instances.each do |id, repo|
+#
+#      begin
+#        unless (site.config['repo_name_whitelist'].length == 0 or site.config['repo_name_whitelist'].include?(repo.name)) then next end
+#        unless site.config['repo_id_whitelist'].size == 0 or site.config['repo_id_whitelist'].include?(repo.id)
+#          next
+#        end
+#
+#        puts "Updating repo / instance "+repo.name+" / "+repo.id+" from uri: "+repo.uri
+#
+#        # open or initialize this repo
+#        local_path = File.join(@checkout_path, repo_instances.name, id)
+#
+#        # make sure there's an actual uri
+#        unless repo.uri
+#          raise IndexException.new("No URI for repo instance " + id, id)
+#        end
+#
+#        if @domain_blacklist.include? URI(repo.uri).hostname
+#          msg = "Repo instance " + id + " has a blacklisted hostname: " + repo.uri.to_s
+#          puts ('WARNING:' + msg).yellow
+#          repo.errors << msg
+#          next
+#        end
+#
+#        (1..3).each do |attempt|
+#          begin
+#            # open or create a repo
+#            vcs = get_vcs(repo)
+#            unless (not vcs.nil? and vcs.valid?) then next end
+#
+#            # fetch the repo
+#            begin
+#              vcs.fetch()
+#            rescue VCSException => e
+#              msg = "Could not update repo, using old version: "+e.msg
+#              puts ("WARNING: "+msg).yellow
+#              repo.errors << msg
+#              vcs.close()
+#            end
+#            # too many open files if we don't do this
+#            vcs.close()
+#
+#            break
+#          rescue VCSException => e
+#            puts ("Failed to communicate with source repo after #{attempt} attempt(s)").yellow
+#            if attempt == 3
+#              raise IndexException.new("Could not fetch source repo: "+e.msg, id)
+#            end
+#          end
+#        end
+#
+#      rescue IndexException => e
+#        @errors[repo_instances.name] << e
+#        repo.accessible = false
+#        repo.errors << e.msg
+#      end
+#
+#    end
   end
 
   def extract_package(site, distro, repo, snapshot, checkout_path, path, pkg_type, manifest_xml)
@@ -675,33 +675,38 @@ class Indexer < Jekyll::Generator
   def sort_repos(site)
     repos_sorted = {}
     repos_sorted['name']= @repo_names.sort_by { |name, instances| name }
+    puts "------"
+    repos_sorted['name'].each do |name, repoInstances|
+      p repoInstances.instances
+    end
+#    exit(1)
 
     repos_sorted['time'] = Hash.new
     $all_distros.each do |distro|
-      repos_sorted['time'][distro] = repos_sorted['name'].reverse.sort_by { |name, instances|
-        instances.default.snapshots.select { |d,s|
+      repos_sorted['time'][distro] = repos_sorted['name'].sort_by { |name, instances|
+        instances.default.snapshots { |d,s|
           s.nil? or not $recent_distros.include?(d) or not distro == d
         }.map { |d,s|
           s.data['last_commit_time'].to_s
-        }.max.to_s
+        }
       }.reverse
     end
 
     repos_sorted['doc'] = Hash.new
     $all_distros.each do |distro|
       repos_sorted['doc'][distro] = repos_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.default.snapshots.select { |d,s|
+        instances.default.snapshots.select { |d,s|
           $recent_distros.include?(d) and not s.data['readmes'].nil? or not d == distro
-        })
+        }
       }.reverse
     end
 
     repos_sorted['released'] = Hash.new
     $all_distros.each do |distro|
       repos_sorted['released'][distro] = repos_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.default.snapshots.select { |d,s|
+        instances.default.snapshots.select { |d,s|
           $recent_distros.include?(d) and not s.released or not d == distro
-        })
+        }
       }
     end
     return repos_sorted
@@ -726,18 +731,18 @@ class Indexer < Jekyll::Generator
     packages_sorted['doc'] = Hash.new
     $all_distros.each do |distro|
       packages_sorted['doc'][distro] = packages_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.snapshots.select { |d,s|
+        instances.snapshots.select { |d,s|
           not s.nil? and $recent_distros.include?(d) and not s.data['readmes'].count > 0 or not distro == d
-        })
+        }
       }.reverse
     end
 
     packages_sorted['released'] = Hash.new
     $all_distros.each do |distro|
       packages_sorted['released'][distro] = packages_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.snapshots.select { |d,s|
+        instances.snapshots.select { |d,s|
           $recent_distros.include?(d) and not s.nil? and s.snapshot.released or not distro == d
-        })
+        }
       }
     end
 
