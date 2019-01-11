@@ -468,7 +468,6 @@ class Indexer < Jekyll::Generator
       'browse_uri' => get_browse_uri(repo.uri, repo.type, snapshot.version),
       # get the date of the last modification
       'last_commit_time' => vcs.get_last_commit_time(),
-
       'readme' => nil,
       'readme_rendered' => nil}
 
@@ -680,7 +679,7 @@ class Indexer < Jekyll::Generator
     repos_sorted['time'] = Hash.new
     $all_distros.each do |distro|
       repos_sorted['time'][distro] = repos_sorted['name'].reverse.sort_by { |name, instances|
-        instances.default.snapshots.reject { |d,s|
+        instances.default.snapshots.select { |d,s|
           s.nil? or not $recent_distros.include?(d) or not distro == d
         }.map { |d,s|
           s.data['last_commit_time'].to_s
@@ -691,7 +690,7 @@ class Indexer < Jekyll::Generator
     repos_sorted['doc'] = Hash.new
     $all_distros.each do |distro|
       repos_sorted['doc'][distro] = repos_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.default.snapshots.count { |d,s|
+        -(instances.default.snapshots.select { |d,s|
           $recent_distros.include?(d) and not s.data['readmes'].nil? or not d == distro
         })
       }.reverse
@@ -700,12 +699,11 @@ class Indexer < Jekyll::Generator
     repos_sorted['released'] = Hash.new
     $all_distros.each do |distro|
       repos_sorted['released'][distro] = repos_sorted['name'].reverse.sort_by { |name, instances|
-      -(instances.default.snapshots.count { |d,s|
-        $recent_distros.include?(d) and not s.released or not d == distro
-      })
-    }
+        -(instances.default.snapshots.select { |d,s|
+          $recent_distros.include?(d) and not s.released or not d == distro
+        })
+      }
     end
-
     return repos_sorted
   end
 
@@ -728,7 +726,7 @@ class Indexer < Jekyll::Generator
     packages_sorted['doc'] = Hash.new
     $all_distros.each do |distro|
       packages_sorted['doc'][distro] = packages_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.snapshots.count { |d,s|
+        -(instances.snapshots.select { |d,s|
           not s.nil? and $recent_distros.include?(d) and not s.data['readmes'].count > 0 or not distro == d
         })
       }.reverse
@@ -737,7 +735,7 @@ class Indexer < Jekyll::Generator
     packages_sorted['released'] = Hash.new
     $all_distros.each do |distro|
       packages_sorted['released'][distro] = packages_sorted['name'].reverse.sort_by { |name, instances|
-        -(instances.snapshots.count { |d,s|
+        -(instances.snapshots.select { |d,s|
           $recent_distros.include?(d) and not s.nil? and s.snapshot.released or not distro == d
         })
       }
